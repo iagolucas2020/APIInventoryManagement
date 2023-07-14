@@ -1,5 +1,5 @@
 ﻿using APIInventoryManagement.API.Models;
-using APIInventoryManagement.API.Repositories.Interfaces;
+using APIInventoryManagement.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIInventoryManagement.API.Controllers
@@ -8,11 +8,11 @@ namespace APIInventoryManagement.API.Controllers
     [ApiController]
     public class StocksController : ControllerBase
     {
-        private readonly IStockRepository _stockRepository;
+        private readonly IStockService _stockService;
 
-        public StocksController(IStockRepository stockRepository)
+        public StocksController(IStockService stockService)
         {
-            _stockRepository = stockRepository;
+            _stockService = stockService;
         }
 
         [HttpGet]
@@ -20,7 +20,7 @@ namespace APIInventoryManagement.API.Controllers
         {
             try
             {
-                var stock = await _stockRepository.GetAsync();
+                var stock = await _stockService.GetAsync();
                 if (stock is null)
                     return NotFound();
                 return stock.ToList();
@@ -37,7 +37,7 @@ namespace APIInventoryManagement.API.Controllers
         {
             try
             {
-                var stock = await _stockRepository.GetByIdAsync(id);
+                var stock = await _stockService.GetByIdAsync(id);
                 if (stock is null)
                     return NotFound($"Id: {id} not found!");
                 return stock;
@@ -57,7 +57,7 @@ namespace APIInventoryManagement.API.Controllers
                 if (stock is null)
                     return BadRequest("Invalid data!");
 
-                await _stockRepository.PostAsync(stock);
+                await _stockService.PostAsync(stock);
 
                 return new CreatedAtRouteResult("GetStock", new { id = stock.Id }, stock);
             }
@@ -76,7 +76,7 @@ namespace APIInventoryManagement.API.Controllers
                 if (id != stock.Id)
                     return BadRequest("Invalid data!");
 
-                await _stockRepository.PutAsync(stock);
+                await _stockService.PutAsync(stock);
 
                 return Ok(stock);
             }
@@ -92,11 +92,11 @@ namespace APIInventoryManagement.API.Controllers
         {
             try
             {
-                var stock = await _stockRepository.GetByIdAsync(id);
+                var stock = await _stockService.GetByIdAsync(id);
                 if (stock is null)
                     return NotFound($"Id: {id} not found!");
 
-                await _stockRepository.Delete(stock);
+                await _stockService.Delete(stock);
 
                 return Ok();
             }

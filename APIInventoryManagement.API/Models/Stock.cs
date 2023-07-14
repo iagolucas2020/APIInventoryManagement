@@ -15,12 +15,12 @@ namespace APIInventoryManagement.API.Models
 
         [Required]
         [StringLength(40)]
-        public string? Location { get; set; }
+        public string Location { get; set; }
 
         [Required]
         public int MerchandiseId { get; set; }
 
         [JsonIgnore]
-        public Merchandise? Merchandise { get; set; }
+        public Merchandise Merchandise { get; set; }
     }
 }

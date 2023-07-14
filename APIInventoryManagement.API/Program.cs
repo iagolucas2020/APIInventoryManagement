@@ -1,6 +1,8 @@
 using APICarRegistration.Context;
 using APIInventoryManagement.API.Repositories;
 using APIInventoryManagement.API.Repositories.Interfaces;
+using APIInventoryManagement.API.Services;
+using APIInventoryManagement.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Text.Json.Serialization;
@@ -21,8 +23,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers().AddJsonOptions(options =>
                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+builder.Services.AddScoped<IMerchandiseService, MerchandiseService>();
 builder.Services.AddScoped<IMerchandiseRepository, MerchandiseRepository>();
+builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<ILogsRepository, LogsRepository>();
 
 var app = builder.Build();
 

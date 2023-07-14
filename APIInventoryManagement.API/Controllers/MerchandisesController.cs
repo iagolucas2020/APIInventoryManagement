@@ -1,5 +1,6 @@
 ﻿using APIInventoryManagement.API.Models;
 using APIInventoryManagement.API.Repositories.Interfaces;
+using APIInventoryManagement.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIInventoryManagement.API.Controllers
@@ -8,11 +9,12 @@ namespace APIInventoryManagement.API.Controllers
     [ApiController]
     public class MerchandisesController : ControllerBase
     {
-        private readonly IMerchandiseRepository _merchandiseRepository;
+        //private readonly IMerchandiseRepository _merchandiseRepository;
+        private readonly IMerchandiseService _merchandiseService;
 
-        public MerchandisesController(IMerchandiseRepository merchandiseRepository)
+        public MerchandisesController(IMerchandiseService merchandiseService)
         {
-            _merchandiseRepository = merchandiseRepository;
+            _merchandiseService = merchandiseService;
         }
 
         [HttpGet]
@@ -20,7 +22,7 @@ namespace APIInventoryManagement.API.Controllers
         {
             try
             {
-                var merchandise = await _merchandiseRepository.GetAsync();
+                var merchandise = await _merchandiseService.GetAsync();
                 if (merchandise is null)
                     return NotFound();
                 return merchandise.ToList();
@@ -37,7 +39,7 @@ namespace APIInventoryManagement.API.Controllers
         {
             try
             {
-                var merchandise = await _merchandiseRepository.GetByIdAsync(id);
+                var merchandise = await _merchandiseService.GetByIdAsync(id);
                 if (merchandise is null)
                     return NotFound($"Id: {id} not found!");
                 return merchandise;
@@ -57,7 +59,7 @@ namespace APIInventoryManagement.API.Controllers
                 if (merchandise is null)
                     return BadRequest("Invalid data!");
 
-                await _merchandiseRepository.PostAsync(merchandise);
+                await _merchandiseService.PostAsync(merchandise);
 
                 return new CreatedAtRouteResult("GetMerchandise", new { id = merchandise.Id }, merchandise);
             }
@@ -76,7 +78,7 @@ namespace APIInventoryManagement.API.Controllers
                 if (id != merchandise.Id)
                     return BadRequest("Invalid data!");
 
-                await _merchandiseRepository.PutAsync(merchandise);
+                await _merchandiseService.PutAsync(merchandise);
 
                 return Ok(merchandise);
             }
@@ -92,11 +94,11 @@ namespace APIInventoryManagement.API.Controllers
         {
             try
             {
-                var merchandise = await _merchandiseRepository.GetByIdAsync(id);
+                var merchandise = await _merchandiseService.GetByIdAsync(id);
                 if (merchandise is null)
                     return NotFound($"Id: {id} not found!");
 
-                await _merchandiseRepository.Delete(merchandise);
+                await _merchandiseService.Delete(merchandise);
 
                 return Ok();
             }

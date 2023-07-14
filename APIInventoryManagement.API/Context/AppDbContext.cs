@@ -10,5 +10,6 @@ namespace APICarRegistration.Context
 
         public DbSet<Merchandise> Merchandises { get; set; }
         public DbSet<Stock> Stocks { get; set; }
+        public DbSet<Logs> Logs { get; set; }
     }
 }
