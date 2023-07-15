@@ -5,6 +5,7 @@ namespace APIInventoryManagement.API.Repositories.Interfaces
     public interface IStockRepository
     {
         Task<IEnumerable<Stock>> GetAsync();
+        Task<IEnumerable<Stock>> GetStockWithMechandisesAsync();
         Task<Stock> GetByIdAsync(int id);
         Task<Stock> PostAsync(Stock stock);
         Task<Stock> PutAsync(Stock stock);

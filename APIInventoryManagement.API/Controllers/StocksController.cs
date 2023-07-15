@@ -1,6 +1,8 @@
 ﻿using APIInventoryManagement.API.Models;
+using APIInventoryManagement.API.Services;
 using APIInventoryManagement.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace APIInventoryManagement.API.Controllers
 {
@@ -9,10 +11,12 @@ namespace APIInventoryManagement.API.Controllers
     public class StocksController : ControllerBase
     {
         private readonly IStockService _stockService;
+        private readonly IHostEnvironment _hostEnvironment;
 
-        public StocksController(IStockService stockService)
+        public StocksController(IStockService stockService, IHostEnvironment hostEnvironment)
         {
             _stockService = stockService;
+            _hostEnvironment = hostEnvironment;
         }
 
         [HttpGet]
@@ -21,6 +25,23 @@ namespace APIInventoryManagement.API.Controllers
             try
             {
                 var stock = await _stockService.GetAsync();
+                if (stock is null)
+                    return NotFound();
+                return stock.ToList();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "There was a problem handling the request. Contact support!");
+            }
+
+        }
+
+        [HttpGet("stocks")]
+        public async Task<ActionResult<IEnumerable<Stock>>> GetStockWithMechandises()
+        {
+            try
+            {
+                var stock = await _stockService.GetStockWithMechandisesAsync();
                 if (stock is null)
                     return NotFound();
                 return stock.ToList();
@@ -99,6 +120,38 @@ namespace APIInventoryManagement.API.Controllers
                 await _stockService.Delete(stock);
 
                 return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "There was a problem handling the request. Contact support!");
+            }
+        }
+
+        [HttpGet("filtro")]
+        public async Task<ActionResult<IEnumerable<Stock>>> Get(DateTime initial, DateTime final)
+        {
+            try
+            {
+                var stock = await _stockService.GetFilterAsync(initial, final);
+                if (stock is null)
+                    return NotFound();
+                return stock.ToList();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "There was a problem handling the request. Contact support!");
+            }
+
+        }
+
+        [HttpGet("pdf")]
+        public async Task<IActionResult> GeneretePdf(DateTime initial, DateTime final)
+        {
+            try
+            {
+                string pathDirectory = _hostEnvironment.ContentRootPath;
+                await _stockService.GeneretePdf(pathDirectory, initial, final);
+                return PhysicalFile(String.Concat(pathDirectory, "wwwroot\\temp\\arquivo.pdf"), "application/pdf", "arquivo.pdf");
             }
             catch (Exception)
             {

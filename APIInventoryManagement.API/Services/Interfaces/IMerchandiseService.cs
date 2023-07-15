@@ -9,5 +9,6 @@ namespace APIInventoryManagement.API.Services.Interfaces
         Task<Merchandise> PostAsync(Merchandise merchandise);
         Task<Merchandise> PutAsync(Merchandise merchandise);
         Task Delete(Merchandise merchandise);
+        Task GeneretePdf(string path);
     }
 }

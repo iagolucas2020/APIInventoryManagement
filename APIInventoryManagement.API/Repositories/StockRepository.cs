@@ -20,6 +20,12 @@ namespace APIInventoryManagement.API.Repositories
             return stock;
         }
 
+        public async Task<IEnumerable<Stock>> GetStockWithMechandisesAsync()
+        {
+            var stock = await _context.Stocks.Include(m => m.Merchandise).AsNoTracking().ToListAsync();
+            return stock;
+        }
+
         public async Task<Stock> GetByIdAsync(int id)
         {
             var stock = await _context.Stocks.FindAsync(id);

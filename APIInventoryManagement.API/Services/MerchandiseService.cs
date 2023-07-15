@@ -1,6 +1,8 @@
 ﻿using APIInventoryManagement.API.Models;
 using APIInventoryManagement.API.Repositories.Interfaces;
 using APIInventoryManagement.API.Services.Interfaces;
+using APIInventoryManagement.API.Services.Shared;
+using System.Text;
 
 namespace APIInventoryManagement.API.Services
 {
@@ -77,6 +79,13 @@ namespace APIInventoryManagement.API.Services
             {
                 await _logsRepository.Insert(new Logs(ex.Message, DateTime.Now));
             }
+        }
+
+        public async Task GeneretePdf(string path)
+        {
+            StringBuilder rel = new StringBuilder();
+            IEnumerable<Merchandise> merchandise = await _merchandiseRepository.GetAsync();
+            Usefuls.merchandisesPdf(path, merchandise);
         }
     }
 }

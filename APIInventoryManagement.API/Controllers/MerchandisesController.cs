@@ -1,7 +1,10 @@
 ﻿using APIInventoryManagement.API.Models;
 using APIInventoryManagement.API.Repositories.Interfaces;
 using APIInventoryManagement.API.Services.Interfaces;
+using APIInventoryManagement.API.Services.Shared;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Http.Headers;
 
 namespace APIInventoryManagement.API.Controllers
 {
@@ -11,10 +14,12 @@ namespace APIInventoryManagement.API.Controllers
     {
         //private readonly IMerchandiseRepository _merchandiseRepository;
         private readonly IMerchandiseService _merchandiseService;
+        private readonly IHostEnvironment _hostEnvironment;
 
-        public MerchandisesController(IMerchandiseService merchandiseService)
+        public MerchandisesController(IMerchandiseService merchandiseService, IHostEnvironment hostEnvironment)
         {
             _merchandiseService = merchandiseService;
+            _hostEnvironment = hostEnvironment;
         }
 
         [HttpGet]
@@ -101,6 +106,21 @@ namespace APIInventoryManagement.API.Controllers
                 await _merchandiseService.Delete(merchandise);
 
                 return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "There was a problem handling the request. Contact support!");
+            }
+        }
+
+        [HttpGet("pdf")]
+        public async Task<IActionResult> GeneretePdf()
+        {
+            try
+            {
+                string pathDirectory = _hostEnvironment.ContentRootPath;
+                await _merchandiseService.GeneretePdf(pathDirectory);
+                return PhysicalFile(String.Concat(pathDirectory, "wwwroot\\temp\\arquivo.pdf"), "application/pdf", "arquivo.pdf");
             }
             catch (Exception)
             {
