@@ -10,9 +10,9 @@ namespace APIInventoryManagement.API.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql($"Insert into Stocks(Quantity, Date, Location, MerchandiseId) Values('20', '{DateTime.Now}', 'China', '1')");
-            migrationBuilder.Sql($"Insert into Stocks(Quantity, Date, Location, MerchandiseId) Values('30', '{DateTime.Now}', 'EUA', '2')");
-            migrationBuilder.Sql($"Insert into Stocks(Quantity, Date, Location, MerchandiseId) Values('40', '{DateTime.Now}', 'Brasil', '3')");
+            migrationBuilder.Sql($"Insert into Stocks(Quantity, Date, Location, MerchandiseId) Values('20', '{DateTime.Now}', 'China', '9')");
+            migrationBuilder.Sql($"Insert into Stocks(Quantity, Date, Location, MerchandiseId) Values('30', '{DateTime.Now}', 'EUA', '10')");
+            migrationBuilder.Sql($"Insert into Stocks(Quantity, Date, Location, MerchandiseId) Values('40', '{DateTime.Now}', 'Brasil', '11')");
         }
 
         /// <inheritdoc />

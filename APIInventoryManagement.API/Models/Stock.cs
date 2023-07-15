@@ -18,6 +18,9 @@ namespace APIInventoryManagement.API.Models
         public string Location { get; set; }
 
         [Required]
+        public bool Receipt { get; set; }
+
+        [Required]
         public int MerchandiseId { get; set; }
 
         [JsonIgnore]
