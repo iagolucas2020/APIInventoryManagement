@@ -78,6 +78,13 @@ namespace APIInventoryManagement.API.Controllers
                 if (stock is null)
                     return BadRequest("Invalid data!");
 
+                if (stock.Receipt.Equals(false))
+                {
+                    var available = await _stockService.CheckAvailableStock(stock.MerchandiseId);
+                    if (available < stock.Quantity)
+                        return Ok($"Quantidade disponível: {available}, reveja seu lançamento de saída de estoque de acordo com o disponível.");
+                }
+
                 await _stockService.PostAsync(stock);
 
                 return new CreatedAtRouteResult("GetStock", new { id = stock.Id }, stock);
@@ -96,6 +103,17 @@ namespace APIInventoryManagement.API.Controllers
             {
                 if (id != stock.Id)
                     return BadRequest("Invalid data!");
+
+                //if (stock.Receipt.Equals(false))
+                //{
+                //    var quantityStockId = await _stockService.GetByIdAsync(stock.Id);
+                //    var available = await _stockService.CheckAvailableStock(stock.MerchandiseId);
+                //    var total = available;
+                //    if (quantityStockId.Receipt.Equals(false))
+                //        total = available + quantityStockId.Quantity;
+                //    if (total < stock.Quantity)
+                //        return NotFound($"Quantidade disponível: {total}, reveja seu lançamento de saída de estoque de acordo com o disponível.");
+                //}
 
                 await _stockService.PutAsync(stock);
 

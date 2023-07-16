@@ -12,5 +12,6 @@ namespace APIInventoryManagement.API.Services.Interfaces
         Task<Stock> PutAsync(Stock stock);
         Task Delete(Stock stock);
         Task GeneretePdf(string path, DateTime initial, DateTime final);
+        Task<int> CheckAvailableStock(int merchandiseId);
     }
 }

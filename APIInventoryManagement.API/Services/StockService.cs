@@ -118,5 +118,21 @@ namespace APIInventoryManagement.API.Services
             stocks = stocks.Where(x => x.Date >= initial && x.Date <= final).ToList();
             Usefuls.stocksPdf(path, stocks);
         }
+
+        public async Task<int> CheckAvailableStock(int merchandiseId)
+        {
+            try
+            {
+                var stocks = await _stockRepository.GetAsync();
+                var inn = stocks.Where(y => y.Receipt.Equals(true) && y.MerchandiseId.Equals(merchandiseId)).Sum(x => x.Quantity);
+                var outt = stocks.Where(y => y.Receipt.Equals(false) && y.MerchandiseId.Equals(merchandiseId)).Sum(x => x.Quantity);
+                return inn - outt;
+            }
+            catch (Exception ex)
+            {
+                await _logsRepository.Insert(new Logs(ex.Message, DateTime.Now));
+                return 0;
+            }
+        }
     }
 }
