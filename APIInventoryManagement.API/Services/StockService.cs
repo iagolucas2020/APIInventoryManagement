@@ -134,5 +134,19 @@ namespace APIInventoryManagement.API.Services
                 return 0;
             }
         }
+
+        public async Task<IEnumerable<Stock>> GetMerchadisesIdAsync(int merchandiseId)
+        {
+            try
+            {
+                var stock = await _stockRepository.GetAsync();
+                return stock.Where(x => x.MerchandiseId.Equals(merchandiseId));
+            }
+            catch (Exception ex)
+            {
+                await _logsRepository.Insert(new Logs(ex.Message, DateTime.Now));
+                return null;
+            }
+        }
     }
 }

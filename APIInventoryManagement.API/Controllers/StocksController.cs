@@ -33,7 +33,6 @@ namespace APIInventoryManagement.API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "There was a problem handling the request. Contact support!");
             }
-
         }
 
         [HttpGet("stocks")]
@@ -170,6 +169,22 @@ namespace APIInventoryManagement.API.Controllers
                 string pathDirectory = _hostEnvironment.ContentRootPath;
                 await _stockService.GeneretePdf(pathDirectory, initial, final);
                 return PhysicalFile(String.Concat(pathDirectory, "wwwroot\\temp\\arquivo.pdf"), "application/pdf", "arquivo.pdf");
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "There was a problem handling the request. Contact support!");
+            }
+        }
+
+        [HttpGet("merchandises/{merchandisesId:int}")]
+        public async Task<ActionResult<IEnumerable<Stock>>> GetMerchandisesId(int merchandisesId)
+        {
+            try
+            {
+                var stock = await _stockService.GetMerchadisesIdAsync(merchandisesId);
+                if (stock is null)
+                    return NotFound();
+                return stock.ToList();
             }
             catch (Exception)
             {
