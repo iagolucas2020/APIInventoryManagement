@@ -28,6 +28,7 @@ namespace APIInventoryManagement.API.Services.Shared
 
             PdfPTable table = new PdfPTable(6);
             PdfPCell cel = new PdfPCell();
+            bool flag = false;
 
             Paragraph p0 = new Paragraph("Relatório de Mercadorias", FontFactory.GetFont("Times New Roman", 15, Font.BOLD, BaseColor.BLACK));
             p0.Alignment = Element.ALIGN_CENTER;
@@ -46,7 +47,7 @@ namespace APIInventoryManagement.API.Services.Shared
             cel.Colspan = 1;
             cel.BackgroundColor = BaseColor.BLUE;
 
-            cel.Phrase = new Phrase("Código:", FontFactory.GetFont("Times New Roman", 11, Font.BOLD, BaseColor.WHITE));
+            cel.Phrase = new Phrase("Código", FontFactory.GetFont("Times New Roman", 11, Font.BOLD, BaseColor.WHITE));
             table.AddCell(cel);
 
             cel.Phrase = new Phrase("Nome", FontFactory.GetFont("Times New Roman", 11, Font.BOLD, BaseColor.WHITE));
@@ -68,18 +69,30 @@ namespace APIInventoryManagement.API.Services.Shared
 
             foreach (var m in merchandises)
             {
-                cel.Phrase = new Phrase(m.Id.ToString());
+                if (flag)
+                {
+                    cel.BackgroundColor = BaseColor.GRAY;
+                }
+                cel.Phrase = new Phrase(m.Id.ToString(), FontFactory.GetFont("Times New Roman", 11, BaseColor.BLACK));
                 table.AddCell(cel);
-                cel.Phrase = new Phrase(m.Name.ToString());
+
+                cel.Phrase = new Phrase(m.Name.ToString(), FontFactory.GetFont("Times New Roman", 11, BaseColor.BLACK));
                 table.AddCell(cel);
-                cel.Phrase = new Phrase(m.RegisterNumber.ToString());
+
+                cel.Phrase = new Phrase(m.RegisterNumber.ToString(), FontFactory.GetFont("Times New Roman", 11, BaseColor.BLACK));
                 table.AddCell(cel);
-                cel.Phrase = new Phrase(m.Manufacturer.ToString());
+
+                cel.Phrase = new Phrase(m.Manufacturer.ToString(), FontFactory.GetFont("Times New Roman", 11, BaseColor.BLACK));
                 table.AddCell(cel);
-                cel.Phrase = new Phrase(m.Type.ToString());
+
+                cel.Phrase = new Phrase(m.Type.ToString(), FontFactory.GetFont("Times New Roman", 11, BaseColor.BLACK));
                 table.AddCell(cel);
-                cel.Phrase = new Phrase(m.Description.ToString());
+
+                cel.Phrase = new Phrase(m.Description.ToString(), FontFactory.GetFont("Times New Roman", 11, BaseColor.BLACK));
                 table.AddCell(cel);
+
+                cel.BackgroundColor = BaseColor.WHITE;
+                flag = !flag;
             }
 
             document.Add(table);
@@ -106,6 +119,7 @@ namespace APIInventoryManagement.API.Services.Shared
 
             PdfPTable table = new PdfPTable(6);
             PdfPCell cel = new PdfPCell();
+            bool flag = false;
 
             Paragraph p0 = new Paragraph("Relatório de Estoque", FontFactory.GetFont("Times New Roman", 15, Font.BOLD, BaseColor.BLACK));
             p0.Alignment = Element.ALIGN_CENTER;
@@ -146,18 +160,30 @@ namespace APIInventoryManagement.API.Services.Shared
 
             foreach (var m in stocks)
             {
-                cel.Phrase = new Phrase(m.Id.ToString());
+                if (flag)
+                {
+                    cel.BackgroundColor = BaseColor.GRAY;
+                }
+                cel.Phrase = new Phrase(m.Id.ToString(), FontFactory.GetFont("Times New Roman", 11, BaseColor.BLACK));
                 table.AddCell(cel);
-                cel.Phrase = new Phrase(m.Merchandise.Name.ToString());
+
+                cel.Phrase = new Phrase(m.Merchandise.Name.ToString(), FontFactory.GetFont("Times New Roman", 11, BaseColor.BLACK));
                 table.AddCell(cel);
-                cel.Phrase = new Phrase(m.Quantity.ToString());
+
+                cel.Phrase = new Phrase(m.Quantity.ToString(), FontFactory.GetFont("Times New Roman", 11, BaseColor.BLACK));
                 table.AddCell(cel);
-                cel.Phrase = new Phrase(m.Date.ToString());
+
+                cel.Phrase = new Phrase(m.Date.ToString(), FontFactory.GetFont("Times New Roman", 11, BaseColor.BLACK));
                 table.AddCell(cel);
-                cel.Phrase = new Phrase(m.Location.ToString());
+
+                cel.Phrase = new Phrase(m.Location.ToString(), FontFactory.GetFont("Times New Roman", 11, BaseColor.BLACK));
                 table.AddCell(cel);
-                cel.Phrase = new Phrase(m.Receipt.Equals(true) ? "Entrada" : "Saída");
+
+                cel.Phrase = new Phrase(m.Receipt.Equals(true) ? "Entrada" : "Saída", FontFactory.GetFont("Times New Roman", 11, BaseColor.BLACK));
                 table.AddCell(cel);
+
+                cel.BackgroundColor = BaseColor.WHITE;
+                flag = !flag;
             }
 
             document.Add(table);
